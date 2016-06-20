@@ -1,0 +1,106 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>无标题文档</title>
+<style>
+*{
+	margin: 0;
+	padding: 0;
+}
+#wrapBox{
+    position:relative;
+    left: 180px;
+    top: 0;
+  	width:1000px;
+    background: #000;
+    height: 100%;
+    -webkit-perspective: 1200px;
+    -webkit-transition: .3s;
+}
+section{
+	width: 100%;
+	position:fixed;
+	top:0;
+	left:0;
+	transform:1s;
+	visibility: hidden;
+}
+.show{
+	visibility:visible;
+}
+.bottom{
+	-webkit-transform-origin:50% 100%;
+	-webkit-animation:lq_qiehbottom 0.5s both ease;
+}
+.top{
+	-webkit-transform-origin:50% 0;
+	-webkit-animation:lq_qiehtop 0.3s both ease;
+}
+.delay180{
+	-webkit-animation-delay:.180s;
+}
+@-webkit-keyframes lq_qiehbottom{
+	to{
+		visibility: hidden;
+		-webkit-transform:rotateX(90deg);
+	}
+}
+@-webkit-keyframes lq_qiehtop{
+	from{
+		visibility: hidden;
+		-webkit-transform:rotateX(-90deg);
+	}
+}
+
+</style>
+</head>
+<body>
+	<input type="button" value="第一个按钮" />
+	<input type="button" value="第二个按钮" />
+	<input type="button" value="第三个按钮" />
+	<div id="wrapBox">
+		<section class="show"></section>
+		<section></section>
+		<section></section>
+	</div>
+<script src="jquery-1.11.1.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	var arr = ['red','yellow','green'];
+	$('#wrapBox').height(window.innerHeight);
+	$('section').height(window.innerHeight);
+	$('section').each(function(i,elem){
+		$(elem).css({
+			'background':arr[i],
+			'zIndex':$('section').length-i
+		});
+	});
+	var oldNum = 0;
+	var oldObj = $('input').eq(0);
+	var onOff = true;
+	
+	$('input').each(function(i,elem){
+		$(elem).num = 0;
+	});
+	$('input').on('click', function(){
+		var _this = $(this);
+		if(oldObj[0] == $(this)[0]){
+			return;
+		}
+		if(!onOff){
+			return;
+		}
+		onOff = false;
+		$('section').removeClass('bottom delay180 top show');
+		
+		$('section').eq(oldNum).addClass('bottom delay180 show');
+		setTimeout(function(){
+			$('section').eq(_this.index()).addClass('top delay180 show');
+			onOff = true;
+		},500);
+		oldNum = $(this).index();
+		oldObj = $(this);
+	});
+</script>
+</body>
+</html>
